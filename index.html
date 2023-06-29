@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>When i go to lotteria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          height: 100vh;
+          background: url("./background.png");
+          font-family: 'Figtree', sans-serif;
+        }
+        h1 {
+          margin-bottom: 0;
+          background-color: white;
+          text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        #timer {
+          margin-top: 50px;
+          font-size: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Я пойду в лоттерию через</h1>
+    <h1 id="timer"></h1>
+</body>
+<script>
+    const whenIGoToLotteria = new Date().setHours(12, 0, 0)
+    const timerElement = document.querySelector('#timer')
+
+    const timerUpdater = setInterval(() => {
+      const timeDiff = Number(whenIGoToLotteria) - Number(new Date())
+      const timeDiffInMinutes = Math.floor(timeDiff/1000/60)
+
+      const hours = Math.floor(timeDiffInMinutes / 60)
+      const minutes = timeDiffInMinutes % 60
+      const seconds = Math.floor(timeDiff/1000 % 60)
+
+      const isAlarmMoment = hours === 0 && minutes === 0
+
+      if (!isAlarmMoment && timerElement.style.color !== 'black') timerElement.style.color = 'black'
+      if (isAlarmMoment && timerElement.style.color !== 'red') timerElement.style.color = 'red'
+
+      timerElement.innerHTML = `${zeroPad(hours)}:${zeroPad(minutes)}:${zeroPad(seconds)}`
+
+      if (timeDiff < 1000) killTimerUpdater()
+    }, 1000)
+
+    const killTimerUpdater = () => {
+      timerElement.remove()
+      clearInterval(timerUpdater)
+    }
+    const zeroPad = (number) => {
+      if (number.toString().length >= 2) return number
+      return '0' + number
+    }
+</script>
+</html>
